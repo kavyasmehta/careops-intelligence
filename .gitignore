@@ -1,0 +1,19 @@
+# Environment
+.env
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+
+# OS
+.DS_Store
+
+# Docker volumes are managed by Docker itself, not the repo
