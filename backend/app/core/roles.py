@@ -43,3 +43,14 @@ def require_role(*allowed: Role):
 
 # Any authenticated demo role — used on routes all three roles may access.
 any_role = require_role(*Role)
+
+
+async def get_current_user_name(
+    x_demo_user: str = Header(default="Demo User"),
+) -> str:
+    """The demo 'signed in as' display name, used for audit-log attribution.
+
+    Sent by the frontend's role switcher alongside X-Demo-Role. Defaults to
+    a generic label so the API works fine even without it (e.g. via /docs).
+    """
+    return x_demo_user

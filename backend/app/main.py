@@ -10,10 +10,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import get_settings
+from app.core.errors import ConflictError, NotFoundError, ValidationError
 from app.core.logging import configure_logging, get_logger
-from app.db.mongo import close_mongo
+from app.db.indexes import ensure_indexes
+from app.db.mongo import close_mongo, get_database, ping_mongo
 from app.db.neo4j import close_neo4j
-from app.routers import health
+from app.routers import (
+    alerts,
+    appointments,
+    audit_logs,
+    authorizations,
+    case_notes,
+    clients,
+    eligibility,
+    health,
+    tasks,
+    users,
+)
 
 logger = get_logger(__name__)
 
@@ -22,6 +35,11 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     configure_logging()
     logger.info("CareOps Intelligence API starting up")
+    if await ping_mongo():
+        await ensure_indexes(get_database())
+        logger.info("MongoDB indexes ensured")
+    else:
+        logger.warning("MongoDB unreachable at startup — skipping index setup")
     yield
     await close_mongo()
     await close_neo4j()
@@ -58,6 +76,21 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     )
 
 
+@app.exception_handler(NotFoundError)
+async def not_found_handler(request: Request, exc: NotFoundError):
+    return JSONResponse(status_code=404, content={"error": {"code": 404, "message": exc.message, "details": None}})
+
+
+@app.exception_handler(ConflictError)
+async def conflict_handler(request: Request, exc: ConflictError):
+    return JSONResponse(status_code=409, content={"error": {"code": 409, "message": exc.message, "details": None}})
+
+
+@app.exception_handler(ValidationError)
+async def validation_error_handler(request: Request, exc: ValidationError):
+    return JSONResponse(status_code=422, content={"error": {"code": 422, "message": exc.message, "details": None}})
+
+
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
     logger.exception("Unhandled error on %s %s", request.method, request.url.path)
@@ -81,3 +114,12 @@ async def root():
 
 
 app.include_router(health.router)
+app.include_router(clients.router)
+app.include_router(eligibility.router)
+app.include_router(authorizations.router)
+app.include_router(appointments.router)
+app.include_router(alerts.router)
+app.include_router(tasks.router)
+app.include_router(case_notes.router)
+app.include_router(audit_logs.router)
+app.include_router(users.router)
