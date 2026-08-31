@@ -6,9 +6,9 @@ A portfolio-quality healthcare **operations management and analytics platform** 
 
 ## Status
 
-🚧 Under active, phased development. Current phase: **Phase 2 — Local infrastructure** (Docker Compose, database connections, health checks). See [`docs/architecture.md`](docs/architecture.md) for the full product plan.
+🚧 Under active, phased development. Current phase: **Phase 4 — Synthetic data** (Faker-based seed script for MongoDB + Neo4j). CRUD APIs for all core entities are live; a full 250-client synthetic dataset with realistic problem scenarios (failed eligibility, expired/exhausted authorizations, missing authorizations, overdue tasks, uneven caseloads) is seeded into both databases. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
 
-A complete project summary, architecture diagram, data models, screenshots, and setup guide will land here as each phase completes — see the phased checklist in the architecture doc for what's built vs. planned.
+A complete project summary, architecture diagram, screenshots, and UI will land here as later phases complete.
 
 ## Quick start (current phase)
 
@@ -23,6 +23,16 @@ docker compose up --build
 - API docs: http://localhost:8000/docs
 - Frontend infra-check page: http://localhost:3000
 - Neo4j Browser: http://localhost:7475 (user `neo4j`, password from `.env`)
+
+### Seeding synthetic data
+
+Once the containers are up:
+
+```bash
+./scripts/run_seed.sh
+```
+
+This generates ~250 clients, 1,000 eligibility checks, 500 authorizations, 1,000 appointments, ~300 alerts, 500 tasks, and 1,000 case notes into MongoDB (fixed random seed — safe to rerun), then builds the corresponding Neo4j graph from that data. See [`docs/architecture.md`](docs/architecture.md) for the reasoning behind the data model and graph model.
 
 ## Tech stack
 
