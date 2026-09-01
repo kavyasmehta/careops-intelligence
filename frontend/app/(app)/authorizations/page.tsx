@@ -9,7 +9,7 @@ import { AuthorizationFormDialog } from "@/components/authorizations/authorizati
 import { DataTable } from "@/components/data-table";
 import { AuthorizationStatusBadge } from "@/components/status-badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FilterSelect } from "@/components/filter-select";
 import { useClientsLookup } from "@/hooks/use-lookups";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { listAuthorizations, listExpiringAuthorizations, type ListAuthorizationsParams } from "@/lib/api/authorizations";
@@ -116,22 +116,14 @@ export default function AuthorizationTrackerPage() {
         onPageChange={setPage}
         emptyMessage="No authorizations match these filters."
         toolbar={
-          <Select
-            value={filters.status || "all"}
-            onValueChange={(value) => updateFilters({ status: !value || value === "all" ? "" : (value as AuthorizationStatus) })}
-          >
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              {STATUS_OPTIONS.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <FilterSelect
+            value={filters.status ?? ""}
+            onChange={(v) => updateFilters({ status: v as AuthorizationStatus | "" })}
+            allLabel="All statuses"
+            placeholder="Status"
+            className="w-48"
+            options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
+          />
         }
       />
     </div>

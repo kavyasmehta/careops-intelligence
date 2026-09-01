@@ -6,6 +6,7 @@ import { useCallback, useMemo } from "react";
 import { toast } from "sonner";
 
 import { DataTable } from "@/components/data-table";
+import { FilterSelect } from "@/components/filter-select";
 import { PriorityBadge, TaskStatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -110,22 +111,13 @@ export function TasksTable({ pageSize = 15 }: { pageSize?: number }) {
       onPageChange={setPage}
       emptyMessage="No tasks match these filters."
       toolbar={
-        <Select
-          value={filters.status || "all"}
-          onValueChange={(value) => updateFilters({ status: !value || value === "all" ? "" : (value as TaskStatus) })}
-        >
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {STATUS_OPTIONS.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <FilterSelect
+          value={filters.status ?? ""}
+          onChange={(v) => updateFilters({ status: v as TaskStatus | "" })}
+          allLabel="All statuses"
+          placeholder="Status"
+          options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
+        />
       }
     />
   );

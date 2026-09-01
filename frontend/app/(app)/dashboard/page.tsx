@@ -14,6 +14,7 @@ import {
 } from "recharts";
 
 import { KpiCard } from "@/components/dashboard/kpi-card";
+import { FilterSelect } from "@/components/filter-select";
 import { ErrorState } from "@/components/states/error-state";
 import { LoadingState } from "@/components/states/loading-state";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,35 +54,34 @@ export default function DashboardPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <Select value={filters.team_id || "all"} onValueChange={(v) => updateFilters({ team_id: !v || v === "all" ? "" : v })}>
-          <SelectTrigger className="w-44">
-            <SelectValue placeholder="Team" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All teams</SelectItem>
-            {teams.map((t) => (
-              <SelectItem key={t} value={t}>
-                {t}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={filters.payer || "all"} onValueChange={(v) => updateFilters({ payer: !v || v === "all" ? "" : v })}>
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Payer" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All payers</SelectItem>
-            {PAYERS.map((p) => (
-              <SelectItem key={p} value={p}>
-                {p}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={filters.status || "all"} onValueChange={(v) => updateFilters({ status: !v || v === "all" ? "" : v })}>
+        <FilterSelect
+          value={filters.team_id ?? ""}
+          onChange={(v) => updateFilters({ team_id: v })}
+          allLabel="All teams"
+          placeholder="Team"
+          className="w-44"
+          options={teams.map((t) => ({ value: t, label: t }))}
+        />
+        <FilterSelect
+          value={filters.payer ?? ""}
+          onChange={(v) => updateFilters({ payer: v })}
+          allLabel="All payers"
+          placeholder="Payer"
+          className="w-48"
+          options={PAYERS.map((p) => ({ value: p, label: p }))}
+        />
+        {/* Not a generic "all" filter: the backend treats an absent status as
+            "active" specifically (see services/dashboard.py), so the empty
+            selection is genuinely labeled "Active clients", not "All statuses". */}
+        <Select key={filters.status} value={filters.status || "all"} onValueChange={(v) => updateFilters({ status: !v || v === "all" ? "" : v })}>
           <SelectTrigger className="w-40">
-            <SelectValue placeholder="Client status" />
+            <SelectValue placeholder="Client status">
+              {(v: string | null) =>
+                ({ all: "Active clients", pending: "Pending clients", inactive: "Inactive clients", discharged: "Discharged clients" })[
+                  v ?? "all"
+                ] ?? "Client status"
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Active clients</SelectItem>

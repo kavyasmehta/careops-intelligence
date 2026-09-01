@@ -7,10 +7,10 @@ import { useMemo } from "react";
 
 import { ClientFormDialog } from "@/components/clients/client-form-dialog";
 import { DataTable } from "@/components/data-table";
+import { FilterSelect } from "@/components/filter-select";
 import { ClientStatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useUsersLookup } from "@/hooks/use-lookups";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { listClients, type ListClientsParams } from "@/lib/api/clients";
@@ -65,7 +65,7 @@ export default function ClientsPage() {
             client={row.original}
             employees={users}
             teams={teams}
-            triggerElement={<Button variant="ghost" size="icon" />}
+            triggerElement={<Button variant="ghost" size="icon" aria-label={`Edit ${row.original.first_name} ${row.original.last_name}`} />}
             triggerContent={<Pencil className="size-4" />}
             onSaved={refetch}
           />
@@ -107,38 +107,21 @@ export default function ClientsPage() {
                 onChange={(e) => updateFilters({ q: e.target.value })}
               />
             </div>
-            <Select
-              value={filters.status || "all"}
-              onValueChange={(value) => updateFilters({ status: !value || value === "all" ? "" : (value as Client["status"]) })}
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                {STATUS_FILTERS.filter(Boolean).map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={filters.team_id || "all"}
-              onValueChange={(value) => updateFilters({ team_id: !value || value === "all" ? "" : value })}
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Team" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All teams</SelectItem>
-                {teams.map((team) => (
-                  <SelectItem key={team} value={team}>
-                    {team}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FilterSelect
+              value={filters.status ?? ""}
+              onChange={(v) => updateFilters({ status: v as Client["status"] | "" })}
+              allLabel="All statuses"
+              placeholder="Status"
+              options={STATUS_FILTERS.filter(Boolean).map((s) => ({ value: s, label: s }))}
+            />
+            <FilterSelect
+              value={filters.team_id ?? ""}
+              onChange={(v) => updateFilters({ team_id: v })}
+              allLabel="All teams"
+              placeholder="Team"
+              className="w-48"
+              options={teams.map((t) => ({ value: t, label: t }))}
+            />
           </div>
         }
       />

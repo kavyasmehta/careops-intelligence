@@ -6,8 +6,8 @@ import { useMemo } from "react";
 
 import { DataTable } from "@/components/data-table";
 import { RunCheckDialog } from "@/components/eligibility/run-check-dialog";
+import { FilterSelect } from "@/components/filter-select";
 import { CoverageStatusBadge } from "@/components/status-badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useClientsLookup } from "@/hooks/use-lookups";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { listEligibilityChecks, type ListEligibilityParams } from "@/lib/api/eligibility";
@@ -85,24 +85,14 @@ export default function EligibilityCenterPage() {
         emptyMessage="No eligibility checks match these filters."
         toolbar={
           <div className="flex flex-wrap items-center gap-2">
-            <Select
-              value={filters.coverage_status || "all"}
-              onValueChange={(value) =>
-                updateFilters({ coverage_status: !value || value === "all" ? "" : (value as CoverageStatus) })
-              }
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Coverage status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                {COVERAGE_OPTIONS.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FilterSelect
+              value={filters.coverage_status ?? ""}
+              onChange={(v) => updateFilters({ coverage_status: v as CoverageStatus | "" })}
+              allLabel="All statuses"
+              placeholder="Coverage status"
+              className="w-48"
+              options={COVERAGE_OPTIONS.map((s) => ({ value: s, label: s }))}
+            />
           </div>
         }
       />

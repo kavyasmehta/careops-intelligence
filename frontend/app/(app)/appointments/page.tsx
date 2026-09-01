@@ -6,9 +6,9 @@ import { useMemo } from "react";
 
 import { AppointmentFormDialog } from "@/components/appointments/appointment-form-dialog";
 import { DataTable } from "@/components/data-table";
+import { FilterSelect } from "@/components/filter-select";
 import { AppointmentStatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useClientsLookup } from "@/hooks/use-lookups";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { listAppointments, type ListAppointmentsParams } from "@/lib/api/appointments";
@@ -88,38 +88,21 @@ export default function AppointmentMonitorPage() {
         emptyMessage="No appointments match these filters."
         toolbar={
           <div className="flex flex-wrap items-center gap-2">
-            <Select
-              value={filters.status || "all"}
-              onValueChange={(value) => updateFilters({ status: !value || value === "all" ? "" : (value as AppointmentStatus) })}
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                {STATUS_OPTIONS.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={filters.service_type || "all"}
-              onValueChange={(value) => updateFilters({ service_type: !value || value === "all" ? "" : value })}
-            >
-              <SelectTrigger className="w-56">
-                <SelectValue placeholder="Service type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All services</SelectItem>
-                {SERVICE_TYPES.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FilterSelect
+              value={filters.status ?? ""}
+              onChange={(v) => updateFilters({ status: v as AppointmentStatus | "" })}
+              allLabel="All statuses"
+              placeholder="Status"
+              options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
+            />
+            <FilterSelect
+              value={filters.service_type ?? ""}
+              onChange={(v) => updateFilters({ service_type: v })}
+              allLabel="All services"
+              placeholder="Service type"
+              className="w-56"
+              options={SERVICE_TYPES.map((s) => ({ value: s, label: s }))}
+            />
           </div>
         }
       />

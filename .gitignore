@@ -13,6 +13,11 @@ frontend/.next/
 frontend/out/
 frontend/next-env.d.ts
 
+# Test artifacts
+frontend/test-results/
+frontend/playwright-report/
+frontend/coverage/
+
 # OS
 .DS_Store
 

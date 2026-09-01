@@ -7,8 +7,8 @@ import { useMemo } from "react";
 import { AssignAlertSelect } from "@/components/alerts/assign-select";
 import { ResolveAlertDialog } from "@/components/alerts/resolve-alert-dialog";
 import { DataTable } from "@/components/data-table";
+import { FilterSelect } from "@/components/filter-select";
 import { AlertStatusBadge, SeverityBadge } from "@/components/status-badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useClientsLookup, useUsersLookup } from "@/hooks/use-lookups";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { listAlerts, type ListAlertsParams } from "@/lib/api/alerts";
@@ -99,38 +99,20 @@ export function AlertsTable({ pageSize = 15 }: { pageSize?: number }) {
       emptyMessage="No alerts match these filters."
       toolbar={
         <div className="flex flex-wrap items-center gap-2">
-          <Select
-            value={filters.severity || "all"}
-            onValueChange={(value) => updateFilters({ severity: !value || value === "all" ? "" : (value as AlertSeverity) })}
-          >
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Severity" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All severities</SelectItem>
-              {SEVERITY_OPTIONS.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            value={filters.status || "all"}
-            onValueChange={(value) => updateFilters({ status: !value || value === "all" ? "" : (value as AlertStatus) })}
-          >
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              {STATUS_OPTIONS.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <FilterSelect
+            value={filters.severity ?? ""}
+            onChange={(v) => updateFilters({ severity: v as AlertSeverity | "" })}
+            allLabel="All severities"
+            placeholder="Severity"
+            options={SEVERITY_OPTIONS.map((s) => ({ value: s, label: s }))}
+          />
+          <FilterSelect
+            value={filters.status ?? ""}
+            onChange={(v) => updateFilters({ status: v as AlertStatus | "" })}
+            allLabel="All statuses"
+            placeholder="Status"
+            options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
+          />
         </div>
       }
     />
