@@ -33,7 +33,10 @@ export function AssignAlertSelect({
   const label = (id: string | null) => (id ? byId.get(id)?.name ?? "Unassigned" : "Unassigned");
 
   return (
-    <Select value={assignedEmployeeId ?? undefined} onValueChange={(value) => value && assign(value)}>
+    // key: see ClientPicker — keeps the displayed label in sync when
+    // assignedEmployeeId changes programmatically (e.g. after a refetch)
+    // rather than via direct interaction with this Select.
+    <Select key={assignedEmployeeId} value={assignedEmployeeId ?? undefined} onValueChange={(value) => value && assign(value)}>
       <SelectTrigger className="w-40" size="sm">
         <SelectValue placeholder="Unassigned">{label}</SelectValue>
       </SelectTrigger>

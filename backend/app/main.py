@@ -17,6 +17,7 @@ from app.db.mongo import close_mongo, get_database, ping_mongo
 from app.db.neo4j import close_neo4j
 from app.routers import (
     alerts,
+    analytics,
     appointments,
     audit_logs,
     authorizations,
@@ -24,6 +25,7 @@ from app.routers import (
     clients,
     dashboard,
     eligibility,
+    graph,
     health,
     tasks,
     users,
@@ -125,3 +127,5 @@ app.include_router(case_notes.router)
 app.include_router(audit_logs.router)
 app.include_router(users.router)
 app.include_router(dashboard.router)
+app.include_router(graph.router)
+app.include_router(analytics.router)

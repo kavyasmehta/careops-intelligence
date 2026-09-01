@@ -10,6 +10,9 @@ import os
 
 os.environ.setdefault("MONGO_URI", "mongodb://localhost:27018")
 os.environ.setdefault("MONGO_DB", "careops_test")
+os.environ.setdefault("NEO4J_URI", "bolt://localhost:7688")
+os.environ.setdefault("NEO4J_USER", "neo4j")
+os.environ.setdefault("NEO4J_PASSWORD", "careops-dev-password")
 
 import pymongo
 import pytest

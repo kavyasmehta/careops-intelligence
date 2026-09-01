@@ -6,7 +6,7 @@ A portfolio-quality healthcare **operations management and analytics platform** 
 
 ## Status
 
-🚧 Under active, phased development. Current phase: **Phase 6 — Core workflows**. All 8 core feature pages are live and working against real seeded data: Executive Dashboard (KPIs + 5 charts + filters), Operations Work Queue (alerts + tasks), Client Directory (search/filter/create/edit), Client 360 profile (7 tabs), Eligibility Center (with manual check simulation), Authorization Tracker (with units-used progress + expiring-soon warnings), Appointment Monitor (missing-authorization warnings), and Alert Center (assign/resolve workflow). See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
+🚧 Under active, phased development. Current phase: **Phase 7 — Analytics and graph intelligence**. All 8 core workflow pages (Phase 6) are live, plus: an **Analytics** page (resolution-time-by-severity, authorization/eligibility outcome distributions, team workload, a 12-week alerts trend, and CSV export for 5 entities) and a **Network Intelligence** page answering all 5 required graph business questions (payer failure rates, employee risk workload, providers with unresolved cases, similar-clients-by-risk-pattern) plus a focused, hand-rolled radial visualization of any one client's relationship network. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
 
 A complete project summary, architecture diagram, screenshots, and UI will land here as later phases complete.
 

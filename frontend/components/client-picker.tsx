@@ -28,7 +28,13 @@ export function ClientPicker({
   };
 
   return (
-    <Select value={value || undefined} onValueChange={(next) => onChange(next ?? "")}>
+    // key={value}: Base UI's SelectValue render-function only re-evaluates
+    // reliably in response to the Select's own internal interactions, not
+    // to the `value` prop changing programmatically from outside (e.g. a
+    // "similar client" shortcut elsewhere on the page calling onChange
+    // directly). Remounting on value keeps the displayed label correct
+    // either way.
+    <Select key={value} value={value || undefined} onValueChange={(next) => onChange(next ?? "")}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder}>{label}</SelectValue>
       </SelectTrigger>

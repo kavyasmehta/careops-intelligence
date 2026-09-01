@@ -172,6 +172,95 @@ export interface PayerPerformance {
   success_rate: number;
 }
 
+export interface AppointmentWithoutAuthorization {
+  client_id: string;
+  client_name: string;
+  appointment_id: string;
+  appointment_datetime: string;
+}
+
+export interface ProviderUnresolvedCases {
+  provider_name: string;
+  specialty: string | null;
+  unresolved_cases: number;
+}
+
+export interface PayerFailureRate {
+  payer: string;
+  failed_checks: number;
+  total_covered_clients: number;
+  failure_rate: number;
+}
+
+export interface EmployeeRiskWorkload {
+  employee_id: string;
+  employee_name: string;
+  role: string;
+  risk_count: number;
+}
+
+export interface SimilarClient {
+  client_id: string;
+  client_name: string;
+  shared_risk_factors: string[];
+  shared_count: number;
+}
+
+export interface EgoNode {
+  id: string;
+  label: string;
+  type: string;
+}
+
+export interface EgoEdge {
+  source: string;
+  target: string;
+  type: string;
+}
+
+export interface ClientEgoNetwork {
+  nodes: EgoNode[];
+  edges: EgoEdge[];
+}
+
+export interface ResolutionTimeBySeverity {
+  severity: string;
+  avg_hours: number;
+  resolved_count: number;
+}
+
+export interface OutcomeCount {
+  label: string;
+  count: number;
+  pct: number;
+}
+
+export interface FailureReasonCount {
+  reason: string;
+  count: number;
+}
+
+export interface TeamWorkload {
+  team: string;
+  client_count: number;
+  open_alerts: number;
+  open_tasks: number;
+}
+
+export interface WeeklyTrendPoint {
+  week_label: string;
+  alerts_created: number;
+}
+
+export interface AnalyticsOverview {
+  resolution_time_by_severity: ResolutionTimeBySeverity[];
+  authorization_outcomes: OutcomeCount[];
+  eligibility_outcomes: OutcomeCount[];
+  top_failure_reasons: FailureReasonCount[];
+  team_workload: TeamWorkload[];
+  alerts_created_trend: WeeklyTrendPoint[];
+}
+
 export interface DashboardMetrics {
   active_clients: number;
   eligibility_success_rate: number;

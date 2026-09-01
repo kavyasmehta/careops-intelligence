@@ -126,7 +126,12 @@ export function ClientFormDialog({
         <DialogHeader>
           <DialogTitle>{isEdit ? "Edit Client" : "Add Client"}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* key: forces a full remount per client (or for "new") so every
+            field — especially the employee Select's cached display label,
+            see ClientPicker — starts fresh instead of being patched in
+            place by reset(), which is also what silenced the Base UI
+            "changing default value after init" console warning. */}
+        <form key={client?.id ?? "new"} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="first_name">First name</Label>
