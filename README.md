@@ -6,7 +6,7 @@ A portfolio-quality healthcare **operations management and analytics platform** 
 
 ## Status
 
-🚧 Under active, phased development. Current phase: **Phase 5 — Frontend foundation** (Next.js app shell, navigation, design system, demo role switcher, typed API client, loading/error states). Backend CRUD APIs are live and seeded with realistic synthetic data (Phases 3–4); the frontend now has a full navigable shell branded as CareOps Intelligence, with real feature pages landing in Phase 6. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
+🚧 Under active, phased development. Current phase: **Phase 6 — Core workflows**. All 8 core feature pages are live and working against real seeded data: Executive Dashboard (KPIs + 5 charts + filters), Operations Work Queue (alerts + tasks), Client Directory (search/filter/create/edit), Client 360 profile (7 tabs), Eligibility Center (with manual check simulation), Authorization Tracker (with units-used progress + expiring-soon warnings), Appointment Monitor (missing-authorization warnings), and Alert Center (assign/resolve workflow). See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
 
 A complete project summary, architecture diagram, screenshots, and UI will land here as later phases complete.
 

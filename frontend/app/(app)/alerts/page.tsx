@@ -1,7 +1,15 @@
-import { Bell } from "lucide-react";
-
-import { PagePlaceholder } from "@/components/states/page-placeholder";
+import { AlertsTable } from "@/components/alerts/alerts-table";
 
 export default function AlertCenterPage() {
-  return <PagePlaceholder title="Alert Center" phase="Phase 6" icon={Bell} />;
+  return (
+    <div className="flex flex-1 flex-col gap-4">
+      <div>
+        <h1 className="text-xl font-semibold">Alert Center</h1>
+        <p className="text-sm text-muted-foreground">
+          Severity-ranked operational alerts with assignment and resolution workflow.
+        </p>
+      </div>
+      <AlertsTable />
+    </div>
+  );
 }

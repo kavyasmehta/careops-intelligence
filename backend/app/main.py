@@ -22,6 +22,7 @@ from app.routers import (
     authorizations,
     case_notes,
     clients,
+    dashboard,
     eligibility,
     health,
     tasks,
@@ -123,3 +124,4 @@ app.include_router(tasks.router)
 app.include_router(case_notes.router)
 app.include_router(audit_logs.router)
 app.include_router(users.router)
+app.include_router(dashboard.router)

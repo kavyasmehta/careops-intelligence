@@ -63,9 +63,11 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   return (await response.json()) as T;
 }
 
-function buildQuery(params: Record<string, string | number | boolean | undefined | null>): string {
+// Accepts any plain params object (interfaces don't structurally satisfy
+// Record<string, V> without an explicit index signature) — cast internally.
+function buildQuery(params: object): string {
   const search = new URLSearchParams();
-  for (const [key, value] of Object.entries(params)) {
+  for (const [key, value] of Object.entries(params as Record<string, string | number | boolean | undefined | null>)) {
     if (value !== undefined && value !== null && value !== "") {
       search.set(key, String(value));
     }
