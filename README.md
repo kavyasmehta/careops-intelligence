@@ -6,7 +6,7 @@ A portfolio-quality healthcare **operations management and analytics platform** 
 
 ## Status
 
-🚧 Under active, phased development. Current phase: **Phase 4 — Synthetic data** (Faker-based seed script for MongoDB + Neo4j). CRUD APIs for all core entities are live; a full 250-client synthetic dataset with realistic problem scenarios (failed eligibility, expired/exhausted authorizations, missing authorizations, overdue tasks, uneven caseloads) is seeded into both databases. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
+🚧 Under active, phased development. Current phase: **Phase 5 — Frontend foundation** (Next.js app shell, navigation, design system, demo role switcher, typed API client, loading/error states). Backend CRUD APIs are live and seeded with realistic synthetic data (Phases 3–4); the frontend now has a full navigable shell branded as CareOps Intelligence, with real feature pages landing in Phase 6. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
 
 A complete project summary, architecture diagram, screenshots, and UI will land here as later phases complete.
 
