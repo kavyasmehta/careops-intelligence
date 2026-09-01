@@ -15,6 +15,17 @@ export async function listAlerts(params: ListAlertsParams = {}): Promise<ListRes
   return apiFetch<ListResponse<Alert>>(`/api/v1/alerts${buildQuery(params)}`);
 }
 
+export interface AlertGenerationResult {
+  scanned_clients: number;
+  alerts_created: number;
+  alerts_skipped_as_duplicate: number;
+  created_by_type: Record<string, number>;
+}
+
+export async function runAlertGeneration(): Promise<ItemResponse<AlertGenerationResult>> {
+  return apiFetch<ItemResponse<AlertGenerationResult>>("/api/v1/alerts/generate", { method: "POST" });
+}
+
 export async function updateAlert(
   id: string,
   input: Partial<{ assigned_employee_id: string | null; status: AlertStatus; resolution_notes: string | null }>,

@@ -1,11 +1,16 @@
 from fastapi import APIRouter, Depends
 
 from app.core.roles import Role, get_current_user_name, require_role
+from app.db.mongo import get_database
 from app.models.client import ClientStatus
 from app.repositories.clients import ClientRepository, get_client_repository
+from app.schemas.case_summary import CaseSummary
 from app.schemas.client import ClientCreate, ClientRead, ClientUpdate
 from app.schemas.common import ItemResponse, ListParams, ListResponse, PageMeta
+from app.schemas.risk import RiskScore
+from app.services.case_summary import generate_case_summary
 from app.services.clients import ClientService
+from app.services.risk_scoring import compute_client_risk
 
 router = APIRouter(prefix="/api/v1/clients", tags=["clients"])
 
@@ -38,6 +43,20 @@ async def list_clients(
 @router.get("/{client_id}", response_model=ItemResponse[ClientRead], dependencies=[Depends(require_role(*Role))])
 async def get_client(client_id: str, service: ClientService = Depends(get_client_service)):
     return ItemResponse(data=await service.get(client_id))
+
+
+@router.get("/{client_id}/risk", response_model=ItemResponse[RiskScore], dependencies=[Depends(require_role(*Role))])
+async def get_client_risk(client_id: str, service: ClientService = Depends(get_client_service)):
+    await service.get(client_id)  # 404s if the client doesn't exist
+    return ItemResponse(data=await compute_client_risk(get_database(), client_id))
+
+
+@router.get(
+    "/{client_id}/summary", response_model=ItemResponse[CaseSummary], dependencies=[Depends(require_role(*Role))]
+)
+async def get_client_summary(client_id: str, service: ClientService = Depends(get_client_service)):
+    client = await service.get(client_id)
+    return ItemResponse(data=await generate_case_summary(get_database(), client))
 
 
 @router.post(

@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends
 
 from app.core.roles import Role, get_current_user_name, require_role
+from app.db.mongo import get_database
 from app.models.alert import AlertSeverity, AlertStatus
 from app.repositories.alerts import AlertRepository, get_alert_repository
 from app.schemas.alert import AlertCreate, AlertRead, AlertUpdate
+from app.schemas.alert_generation import AlertGenerationResult
 from app.schemas.common import ItemResponse, ListParams, ListResponse, PageMeta
+from app.services.alert_generation import generate_alerts
 from app.services.alerts import AlertService
 
 router = APIRouter(prefix="/api/v1/alerts", tags=["alerts"])
@@ -45,6 +48,19 @@ async def create_alert(
     service: AlertService = Depends(get_alert_service),
 ):
     return ItemResponse(data=await service.create(payload, user=user))
+
+
+@router.post(
+    "/generate",
+    response_model=ItemResponse[AlertGenerationResult],
+    dependencies=[Depends(require_role(Role.OPERATIONS_MANAGER))],
+)
+async def run_alert_generation():
+    """One-off admin-triggered sweep — stands in for a scheduled job in a
+    real deployment. Safe to call repeatedly: duplicate-active-alert
+    prevention means re-running never creates the same alert twice.
+    """
+    return ItemResponse(data=await generate_alerts(get_database()))
 
 
 @router.patch("/{alert_id}", response_model=ItemResponse[AlertRead], dependencies=[Depends(require_role(*Role))])

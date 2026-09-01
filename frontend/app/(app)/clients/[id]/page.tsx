@@ -13,6 +13,8 @@ import {
   SeverityBadge,
   TaskStatusBadge,
 } from "@/components/status-badge";
+import { CaseSummaryCard } from "@/components/clients/case-summary-card";
+import { RiskScoreCard } from "@/components/clients/risk-score-card";
 import { ErrorState } from "@/components/states/error-state";
 import { LoadingState } from "@/components/states/loading-state";
 import { EmptyState } from "@/components/states/empty-state";
@@ -110,6 +112,8 @@ export default function ClientProfilePage() {
               <p>Assigned employee ID: {client.assigned_employee_id ?? "Unassigned"}</p>
             </CardContent>
           </Card>
+          <RiskScoreCard clientId={clientId} />
+          <CaseSummaryCard clientId={clientId} />
         </TabsContent>
 
         <TabsContent value="eligibility">

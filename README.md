@@ -6,7 +6,7 @@ A portfolio-quality healthcare **operations management and analytics platform** 
 
 ## Status
 
-🚧 Under active, phased development. Current phase: **Phase 7 — Analytics and graph intelligence**. All 8 core workflow pages (Phase 6) are live, plus: an **Analytics** page (resolution-time-by-severity, authorization/eligibility outcome distributions, team workload, a 12-week alerts trend, and CSV export for 5 entities) and a **Network Intelligence** page answering all 5 required graph business questions (payer failure rates, employee risk workload, providers with unresolved cases, similar-clients-by-risk-pattern) plus a focused, hand-rolled radial visualization of any one client's relationship network. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
+🚧 Under active, phased development. Current phase: **Phase 8 — Risk & automation**. Adds: an explainable, rule-based **operational risk score** (0–100, Low/Medium/High/Critical, every point traceable to a named factor) shown on each client's profile; a **one-click alert-generation sweep** (Operations Manager only) that scans all clients for the 7 spec'd conditions and creates any missing alerts, safe to re-run without creating duplicates; and an **AI case-summary generator** that always works with zero API keys (deterministic template) with an LLM rewrite available strictly as an opt-in behind an env var, clearly labeled either way and never issuing clinical recommendations. See [`docs/architecture.md`](docs/architecture.md) for the full product plan and phased checklist.
 
 A complete project summary, architecture diagram, screenshots, and UI will land here as later phases complete.
 
