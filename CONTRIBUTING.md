@@ -29,11 +29,28 @@ npm run dev
 
 ## Tests
 
-- Backend: `cd backend && source .venv/bin/activate && pytest`
-- Frontend: `cd frontend && npm test` (added in Phase 9)
-- End-to-end: `cd frontend && npx playwright test` (added in Phase 9)
+- **Backend** (48 Pytest tests — CRUD, validation, risk scoring, alert generation, dashboard/analytics, graph queries):
+  ```bash
+  cd backend && source .venv/bin/activate && pytest
+  ```
+- **Frontend unit tests** (Vitest + React Testing Library, 14 tests — forms, work-queue actions, client-profile rendering, loading/error states):
+  ```bash
+  cd frontend && npm run test        # single run
+  cd frontend && npm run test:watch  # watch mode while iterating
+  ```
+- **End-to-end** (Playwright, against the real running stack — requires `docker compose up` and seeded data first):
+  ```bash
+  cd frontend && npm run test:e2e
+  ```
+  The e2e spec resolves a real alert as part of the workflow it verifies, so re-run `./scripts/run_seed.sh` afterward before using the app for a demo.
 
-Run tests before committing anything that touches `app/services/` or API contracts.
+Run the relevant test suite before committing anything that touches `app/services/`, API contracts, or shared frontend components (especially `FilterSelect` and other `components/ui` primitives — see the Base UI gotchas below).
+
+## Base UI gotchas (shadcn/ui is built on Base UI, not Radix, here)
+
+- Use Base UI's `render` prop for composition, not Radix's `asChild`.
+- `SelectValue` does not automatically track a matched `SelectItem`'s rendered label — pass a `children` render function, e.g. `<SelectValue>{(value) => label}</SelectValue>`. It also won't reactively update on an externally-changed `value` prop without a `key` forcing remount.
+- Prefer the shared `components/filter-select.tsx` for any "All X" style filter dropdown — it already encodes the fix above; don't re-derive it per page.
 
 ## Environment variables
 
